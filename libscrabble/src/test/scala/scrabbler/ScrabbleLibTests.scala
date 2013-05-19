@@ -5,7 +5,7 @@ import org.scalatest.FunSpec
 import org.scalatest.BeforeAndAfter
 
 class ScrabbleLibTests extends FunSpec with BeforeAndAfter {
-  describe("getSubstrings function"){
+  describe("genSubstrings function"){
     it("handles empty strings"){
       assert(SearchUtils.genSubstrings("").isEmpty)
     }

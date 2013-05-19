@@ -1,6 +1,5 @@
 package scrabbler
 
-import scala.util.Try
 import java.io.File
 import collection.SortedSet
 
@@ -11,18 +10,12 @@ object Indexer {
 
   def normalize(str: String) = str.toUpperCase.trim
 
-  def create(file: File): Core.Index ={
-    
-    val lines = (io.Source.fromFile(file) getLines) toList
+  def create(file: File): Core.Index = create(io.Source.fromFile(file) getLines)
+  
 
-    Console println s"file is ${lines.length} lines long"
+  def create(words: Iterator[String]): Core.Index ={
 
-    create(lines) 
-  }
-
-  def create(words: List[String]): Core.Index ={
-
-    val data = for(word <- words par;
+    val data = for(word <- words;
       score = SearchUtils.score(word);
       substring <- SearchUtils.genSubstrings(word)) yield (substring, score, word) 
       val emptySet = SortedSet.empty[(Core.Score,Core.Word)](orderByDescendingScore)
