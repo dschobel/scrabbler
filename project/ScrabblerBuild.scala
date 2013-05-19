@@ -17,7 +17,11 @@ object ScrabblerBuild extends Build {
                           base = file("libscrabble"),
                           settings = buildSettings)
 
-  lazy val indexer = Project(id = "applications", 
-    base = file("applications"),
+  lazy val indexer = Project(id = "indexer", 
+    base = file("indexer"),
+    settings = buildSettings).dependsOn(libscrabble)
+
+  lazy val suggester = Project(id = "suggester", 
+    base = file("suggester"),
     settings = buildSettings).dependsOn(libscrabble)
 }

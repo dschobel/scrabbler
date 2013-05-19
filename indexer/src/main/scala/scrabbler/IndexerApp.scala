@@ -6,7 +6,7 @@ import java.io.{File,FileInputStream}
 
 
 object IndexApp {
-  def serialize(index: Indexer.Index, destination: File): Unit = {
+  def serialize(index: Core.Index, destination: File): Unit = {
     import java.io.{FileOutputStream,ObjectOutputStream}
 
     assert(destination.canWrite)

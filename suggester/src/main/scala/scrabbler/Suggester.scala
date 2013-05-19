@@ -6,11 +6,11 @@ import java.io.{File,FileInputStream}
 
 object SuggestionApp {
 
-  def deserialize(file: File): Indexer.Index = {
+  def deserialize(file: File): Core.Index = {
     import java.io.{ObjectInputStream,FileInputStream}
     val in = new FileInputStream(file)
     val reader = new ObjectInputStream(in)
-    reader.readObject().asInstanceOf[Indexer.Index]
+    reader.readObject().asInstanceOf[Core.Index]
   }
 
   def main(args: Array[String]): Unit = {
