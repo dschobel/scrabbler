@@ -13,15 +13,11 @@ object ScrabblerBuild extends Build {
     libraryDependencies ++= Seq(scalatestLib)
   )
 
-  lazy val core = Project(id = "core", 
-                          base = file("core"),
+  lazy val libscrabble = Project(id = "libscrabble", 
+                          base = file("libscrabble"),
                           settings = buildSettings)
 
-  lazy val indexer = Project(id = "indexer", 
-    base = file("indexer"),
-    settings = buildSettings).dependsOn(core)
-
-  lazy val suggester = Project(id = "suggester", 
-    base = file("suggester"),
-    settings = buildSettings).dependsOn(core)
+  lazy val indexer = Project(id = "applications", 
+    base = file("applications"),
+    settings = buildSettings).dependsOn(libscrabble)
 }

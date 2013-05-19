@@ -5,6 +5,35 @@ import org.scalatest.FunSpec
 import org.scalatest.BeforeAndAfter
 
 class ScrabbleLibTests extends FunSpec with BeforeAndAfter {
+  describe("getSubstrings function"){
+    it("handles empty strings"){
+      assert(SearchUtils.genSubstrings("").isEmpty)
+    }
+
+    it("is correct #1"){
+      assert(SearchUtils.genSubstrings("a").contains("a"))
+    }
+
+    it("is correct #2"){
+      val res = SearchUtils.genSubstrings("ab")
+      assert(res.contains("a"))
+      assert(res.contains("ab"))
+      assert(res.contains("b"))
+      assert(res.size === 3)
+    }
+
+    it("is correct #3"){
+      val res = SearchUtils.genSubstrings("abc")
+      assert(res.contains("a"))
+      assert(res.contains("ab"))
+      assert(res.contains("abc"))
+      assert(res.contains("bc"))
+      assert(res.contains("b"))
+      assert(res.contains("c"))
+      assert(res.size === 6)
+    }
+  }
+
   describe("score function") {
     it("scores a zero character word as zero") {
       assert(SearchUtils.score("") === 0)
@@ -42,7 +71,6 @@ class ScrabbleLibTests extends FunSpec with BeforeAndAfter {
     it("returns the correct score for words with multiple characters"){
       assert(SearchUtils.score("cat") === 5)
       assert(SearchUtils.score("aaa") === 3)
-
     }
   }
 }
