@@ -1,0 +1,3 @@
+#!/bin/bash 
+
+env JAVA_OPTS="-Xmx1g" java -jar suggester/target/scala-2.10/suggester_2.10-ALPHA-one-jar.jar $1 $2 $3

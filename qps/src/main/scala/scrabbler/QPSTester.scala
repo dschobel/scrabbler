@@ -1,13 +1,36 @@
 package scrabbler
 
 
-import scala.util.Try
+import scala.util.{Try,Failure,Success}
 import java.io.File
 
 /**
  * a console application to gather metrics for repeated queries
  */
 object QPSTester {
+
+  val usage = "usage: qps <index> <number of queries> <results per query> \n ie: 'qps words.bin 10000 3'"
+
+  def checkArgs[T](t: Try[T], pred: (T => Boolean), msg: String = ""): Unit = t match {
+      case Failure(exn: Exception) => { println("parsing argument failed with " + exn.getMessage)
+                                      System.exit(0) }
+      case Success(value: T) => {
+        if(!pred(value)){
+          println("bad argument: " + msg)
+          println(usage)
+          System.exit(0)
+        }
+      }
+  }
+
+  def checkArgs(t: Try[_]): Unit = t match {
+      case Failure(exn: Exception) => { 
+        println("parsing argument failed with " + exn.getMessage)
+        println(usage)
+        System.exit(0) 
+      }
+      case _ => ()
+  }
 
 
   def main(args: Array[String]): Unit = {
@@ -16,13 +39,19 @@ object QPSTester {
     val numQueries = Try(args(1).toInt)
     val resultsPerQuery = Try(args(2).toInt)
 
-    input.map{ f => if(  !f.canRead){ println("can't read input file") }}
+    checkArgs(numQueries)
+
+    checkArgs(resultsPerQuery)
+
+    checkArgs(input,(file:File) => file.canRead, "index file is not readable")
+
+
     var queryLength = 0
     val queryStart = System.currentTimeMillis
 
     for(in <- input if in.canRead; numQ <- numQueries; rpq <- resultsPerQuery){
       val index = SerializationUtils.kryo_deserialize(in)
-      val queries = SearchUtils.genSubstrings("mississippi") ++ SearchUtils.genSubstrings("abracadabra")
+      val queries = SearchUtils.genSubstrings("papua") ++ SearchUtils.genSubstrings("mississippi") ++ SearchUtils.genSubstrings("abracadabra")
       for(i <- 1 to numQ){  
 
         val query = util.Random.shuffle(queries).head

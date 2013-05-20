@@ -59,8 +59,8 @@ object SerializationUtils {
     val input = new Input(new BufferedInputStream(ifile))
     val deserialized = kryo.readClassAndObject(input).asInstanceOf[Core.Index]
     input.close() 
-    Console println "deserialized index with " + deserialized.keys.size + " from kryo, yaaaa!"
-    Console println s"done, kryo took ${(System.currentTimeMillis - start) / 1000} seconds to deserialize"
+    Console println "Deserialized index with " + deserialized.keys.size + " keys"
+    Console println s"kryo took ${(System.currentTimeMillis - start) / 1000} seconds to deserialize"
     deserialized
   }
 
