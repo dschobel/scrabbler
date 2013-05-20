@@ -60,7 +60,7 @@ object SerializationUtils {
     val deserialized = kryo.readClassAndObject(input).asInstanceOf[Core.Index]
     input.close() 
     Console println "Deserialized index with " + deserialized.keys.size + " keys"
-    Console println s"kryo took ${(System.currentTimeMillis - start) / 1000} seconds to deserialize"
+    Console println s"kryo took ${(System.currentTimeMillis - start) / 1000} seconds to deserialize index"
     deserialized
   }
 

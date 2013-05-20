@@ -41,8 +41,8 @@ object IndexApp {
 
     val input = Try(new File(args(0)))
     val kryo_output = Try(new File(args(1)))
-    Console println s"reading word list from ${args(0)}"
-    Console println s"writing index to ${args(1)}"
+    Console println s"word list will be read from ${args(0)}"
+    Console println s"index will be written to ${args(1)}"
 
 
     for(kout <- kryo_output if !kout.canWrite){
@@ -54,6 +54,8 @@ object IndexApp {
       Console println "creating index... "
       val start = System.currentTimeMillis
       val index = Indexer.create(in)
+      val as = index("a")
+      Console println("entry 'a' contains " + as.size + " values\n\t")
       //Console println s"heap size after creating index: ${Runtime.getRuntime().totalMemory()}"
       Console println "Index created with " + index.keys.size + s" keys in ${(System.currentTimeMillis - start) / 1000} seconds"
       Console println "Serializing index..."

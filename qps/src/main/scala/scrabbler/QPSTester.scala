@@ -50,11 +50,13 @@ object QPSTester {
     val queryStart = System.currentTimeMillis
 
     for(in <- input if in.canRead; numQ <- numQueries; rpq <- resultsPerQuery){
+      Console println "rehydrating index" 
       val index = SerializationUtils.kryo_deserialize(in)
+
+      //for the sample queries, we generate all the possible substrings of a few longer words
       val queries = SearchUtils.genSubstrings("papua") ++ SearchUtils.genSubstrings("mississippi") ++ SearchUtils.genSubstrings("abracadabra")
       for(i <- 1 to numQ){  
-
-        val query = util.Random.shuffle(queries).head
+        val query = util.Random.shuffle(queries).head //pick a substring at random
         val results = index(query).take(rpq)
         queryLength += query.length
       }

@@ -6,7 +6,7 @@ import collection.SortedSet
 object Indexer {
 
 
-  val orderByDescendingScore = Ordering.by[(Core.Score, Core.Word),Core.Score](- _._1)
+  val orderByDescendingScore = Ordering[(Core.Score, Core.Word)].on((x: Pair[Core.Score,Core.Word]) => (-x._1, x._2))
 
   def normalize(str: String) = str.toUpperCase.trim
 
@@ -20,7 +20,7 @@ object Indexer {
       substring <- SearchUtils.genSubstrings(word)) yield (substring, score, word) 
       val emptySet = SortedSet.empty[(Core.Score,Core.Word)](orderByDescendingScore)
       val emptyMap = Map[Core.SubString,SortedSet[(Core.Score,Core.Word)]]().withDefaultValue(emptySet).asInstanceOf[Core.Index]
-    data.foldLeft(emptyMap){(map,entry) => { map.updated(entry._1: Core.SubString,  map(entry._1) + Pair(entry._2, entry._3)) }}
+    data.foldLeft(emptyMap){(map,entry) => { map + ((entry._1, map(entry._1) + Pair(entry._2, entry._3))) }}
   }
 
 }

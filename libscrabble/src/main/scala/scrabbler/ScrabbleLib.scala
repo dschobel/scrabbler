@@ -29,7 +29,7 @@ object SearchUtils {
   def score(str: String) = str.foldLeft(0){(acc,c) => acc + CharScores(c.toUpper)}
 
   /**
-   * enumerate all of the possible substrings of a given string
+   * enumerate all of the distinct substrings of a given string
    * @param str the string whose substrings you want to gen
    * @return a list of all the possible substrings of a given string
    * @example given "cat" as an input, this method produces List("c","ca","cat","a","at","t")
@@ -42,6 +42,6 @@ object SearchUtils {
         aux(cs.take(cs.length-1), res ++ acc)
       }
     }
-    aux((str toList)).map{_.mkString}
+    aux((str toList)).map{_.mkString}.distinct
   }    
 }

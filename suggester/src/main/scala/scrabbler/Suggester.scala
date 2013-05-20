@@ -38,7 +38,7 @@ object SuggestionApp {
       //Console println s"heap size after deserializing second instance of index: ${Runtime.getRuntime().totalMemory()}"
       //Console println s"querying index with $q and returning max $n results"
       val results = index(q).take(n).mkString("\n\t\t")
-      println(results.size + s" total results, top $n are:\n\t\t" + results)
+      println(index(q).size + s" total results, top $n are:\n\t\t" + results)
     }
   }
 }
