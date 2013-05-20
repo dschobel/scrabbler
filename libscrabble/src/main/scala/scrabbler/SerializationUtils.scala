@@ -38,6 +38,8 @@ object SerializationUtils {
    * deserialize an index object using the kryo format
    * @param source
    * @return the rehydrated index object
+   * @note the code in this function was only slightly modified from a snippet 
+   * I found on StackOverflow. I take no credit for it.
    */
   def kryo_deserialize(source: File): Core.Index ={
     import com.esotericsoftware.kryo.Kryo
@@ -68,6 +70,8 @@ object SerializationUtils {
    * serialize an index object using the kryo format
    * @param index the object to serialize
    * @param destination the destination file
+   * @note the code in this function was only slightly modified from a snippet 
+   * I found on StackOverflow. I take no credit for it.
    */
   def kryo_serialize(index: Core.Index, destination: File): Unit = {
     import com.esotericsoftware.kryo.Kryo

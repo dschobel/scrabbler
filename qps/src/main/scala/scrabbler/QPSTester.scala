@@ -47,29 +47,39 @@ object QPSTester {
 
 
     var queryLength = 0
-    val queryStart = System.currentTimeMillis
 
     for(in <- input if in.canRead; numQ <- numQueries; rpq <- resultsPerQuery){
       Console println "rehydrating index" 
       val index = SerializationUtils.kryo_deserialize(in)
 
+      val queryStart = System.currentTimeMillis
+
       //for the sample queries, we generate all the possible substrings of a few longer words
-      val queries = SearchUtils.genSubstrings("papua") ++ SearchUtils.genSubstrings("mississippi") ++ SearchUtils.genSubstrings("abracadabra")
+      val potentialQueries = SearchUtils.genSubstrings("papua") ++ 
+                    SearchUtils.genSubstrings("mississippi") ++ 
+                    SearchUtils.genSubstrings("abracadabra") ++
+                    SearchUtils.genSubstrings("abbreviations") ++
+                    SearchUtils.genSubstrings("baptizing") ++
+                    SearchUtils.genSubstrings("solidnesses") 
+
+      Console println "choosing at random from " + potentialQueries.size + " potential queries"
+
+      Console print s"running $numQ sequential queries..."
       for(i <- 1 to numQ){  
-        val query = util.Random.shuffle(queries).head //pick a substring at random
+        val query = potentialQueries(util.Random.nextInt(potentialQueries.size)) //pick a substring at random
+        //println(s"querying with $query")
         val results = index(query).take(rpq)
         queryLength += query.length
       }
+      Console println " done"
 
-      val totalQueryTime = (System.currentTimeMillis - queryStart) / 1000
+      val totalQueryTime = (System.currentTimeMillis - queryStart) / 1000.0 
       val avgQuerySz: Double = queryLength / numQ.asInstanceOf[Double]
       val qps: Double = numQ / totalQueryTime.asInstanceOf[Double] 
-      val queriesPerSecondPerQuerySize = qps / avgQuerySz
 
-      Console println s"total query time: $totalQueryTime seconds"
+      Console println s"average query size (character length): $avgQuerySz"
+      Console println s"total query time (seconds): $totalQueryTime s"
       Console println s"qps: $qps"
-      Console println s"average query size: $avgQuerySz"
-      Console println s"queries per second normalized by query size: $queriesPerSecondPerQuerySize"
     }
   }
 }

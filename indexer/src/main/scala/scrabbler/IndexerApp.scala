@@ -54,9 +54,8 @@ object IndexApp {
       Console println "creating index... "
       val start = System.currentTimeMillis
       val index = Indexer.create(in)
-      val as = index("a")
-      Console println("entry 'a' contains " + as.size + " values\n\t")
-      //Console println s"heap size after creating index: ${Runtime.getRuntime().totalMemory()}"
+
+      Console println s"JVM memory usage after creating index: ${Runtime.getRuntime().totalMemory()} bytes"
       Console println "Index created with " + index.keys.size + s" keys in ${(System.currentTimeMillis - start) / 1000} seconds"
       Console println "Serializing index..."
       SerializationUtils.kryo_serialize(index, kout)
