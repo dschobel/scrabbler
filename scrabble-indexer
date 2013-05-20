@@ -1,3 +1,0 @@
-#!/bin/bash 
-
-env JAVA_OPTS="-Xmx1g" java -jar bin/indexer_2.10-ALPHA-one-jar.jar $1 $2

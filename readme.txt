@@ -11,9 +11,13 @@ Design Goals
 
 To meet the goal of supporting fast substring queries I investigated creating an inverted index keyed by the possible substrings of every word in the scrabble dictionary.  
 
-With the top priority to optimize query speed this decision will relegate my solution to client/server architectures since loading large indexes into memory makes fast client start up times significantly more complicated. 
+This decision to build one master index will relegate my solution to client/server architectures since loading large indexes into memory makes fast client start up times significantly more complicated. 
 
-I think this is a reasonable decision given the context of a scrabble game where the index will be presumably queried repeatedly over the course of a long-lived game (or many such games if used in hosted contexts).
+I think this is a reasonable decision given the context of a scrabble game where the index will presumably be queried repeatedly over the course of a long-lived game (or many such games if used in hosted contexts). If client startup time is a concern, we could generate one data file per entry in our index, effectively sharding the data. This means that if the query were 'cat', we'd only load the relevant data file.
+
+For the sake of simplicity, I instead chose to build a monolithic index but the application pays the costs on load times (see discussion in results), but again, given the use-case of a long-lived game I think the decision is justifiable.
+
+
 
 The index will be built as follows; given the word 'cat', I created a map with six keys: 'c','ca','cat','a','at','t'.
 
@@ -77,10 +81,7 @@ Since we have the full index in memory this is extremely fast. Asymptotically, I
 Sample timing results are below, but on my test setup I regularly saw in excess of 600,000 queries per second.
 
 Client Launch:
-As mentioned above, this solution is definitely in client-server territory since not only is reading 83MB on client launch going to be slow, but rehydrating 650MB of object data is going to be slow as well. This means that time to run the 'scrabble-suggester' command is going to be dominated by JVM startup time and deserializing the index.
-
-For example: the sample query run below below takes 23 seconds of wall time. 5ms of which is the actual index query.
-
+As mentioned in the introduction, this solution is definitely in client-server territory since not only is reading 83MB on client launch going to be slow, but rehydrating 650MB of object data is going to be slow as well. This means that time to run the 'scrabble-suggester' command is going to be dominated by JVM startup time and deserializing the index.  For example; the sample query run below below takes 23 seconds of wall time, only 5ms of which is the actual query time. As was mentioned in the introduction, if client start times are a concern, sharding the data is a viable alternative.
 
 
 Sample runs using the full scrabble word list: 
